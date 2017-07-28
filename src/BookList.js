@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import BookShelf from './BookShelf';
 
-function BookList({ books, onUpdateBookShelf }){
+const BookList = ({ books, onUpdateBookShelf }) => {
 	const currentlyReadingBooks = books.filter(book => book.shelf === 'currentlyReading');
 	const wantToReadBooks = books.filter(book => book.shelf === 'wantToRead');
 	const readBooks = books.filter(book => book.shelf === 'read');

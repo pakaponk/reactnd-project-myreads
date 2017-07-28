@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Book({ book, onUpdateBookShelf, shelf = "none" }){
+const Book = ({ book, onUpdateBookShelf}) => {
 	const title = book.title;
 	const authors = (book.authors && book.authors.reduce((prev,author) => `${prev}, ${author}`));
 
