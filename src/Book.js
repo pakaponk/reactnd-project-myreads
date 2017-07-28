@@ -33,7 +33,7 @@ const Book = ({ book, onUpdateBookShelf}) => {
 			{ authors && <div className="book-authors">{authors}</div> }
 		</div>
 	);
-}
+};
 
 Book.propTypes = {
 	book: PropTypes.object.isRequired,

@@ -26,7 +26,7 @@ const BookList = ({ books, onUpdateBookShelf }) => {
 			</div>
 		</div>
 	);
-}
+};
 
 BookList.propTypes = {
 	books: PropTypes.array.isRequired,
