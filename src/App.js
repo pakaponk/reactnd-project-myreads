@@ -15,7 +15,8 @@ class BooksApp extends React.Component {
 		 * users can use the browser's back and forward buttons to navigate between
 		 * pages, as well as provide a good URL they can bookmark and share.
 		 */
-		books: []
+		books: [],
+		searchResult: []
 	}
 
 	componentDidMount(){
@@ -44,6 +45,37 @@ class BooksApp extends React.Component {
 		BooksAPI.update(selectedBook, shelf);
 	}
 
+	handleClearSearchResult = () => {
+		this.setState({ searchResult: [] });
+	}
+
+	handleSearchBooks = (query) => {
+		if (query.length)
+		{
+			BooksAPI.search(query, 20)
+			.then(books => {
+				if (books.error && books.error === 'empty query')
+				{
+					this.handleClearSearchResult();
+				}
+				else
+				{
+					books = books.map(book => {
+						const existedBook = this.state.books.find(b => b.id === book.id);
+						return existedBook ? existedBook : Object.assign({}, book, {
+							shelf: "none"
+						});
+					});
+					this.setState({ searchResult: books });
+				}
+			});
+		}
+		else
+		{
+			this.handleClearSearchResult();
+		}
+	}
+
 	addNewBookToLocalLibrary(newBook, shelf){
 		this.setState((state) => ({
 			books: [...state.books, Object.assign({}, newBook, { shelf }) ]
@@ -52,9 +84,14 @@ class BooksApp extends React.Component {
 
 	updateBookInLocalLibrary(updatingBook, shelf){
 		this.setState((state) => ({
-			books: state.books.map(book =>
-				book.id === updatingBook.id ?
-					Object.assign({}, book, { shelf }) : book)
+			books: state.books.map(book => {
+				if (book.id === updatingBook.id )
+				{
+					console.log(Object.assign({}, book, { shelf: shelf }));
+					return Object.assign({}, book, { shelf: shelf });
+				}
+				return book;
+			})
 		}));
 	}
 
@@ -65,13 +102,16 @@ class BooksApp extends React.Component {
 	}
 
 	render() {
-		const { books } = this.state;
+		const { books, searchResult } = this.state;
 
 		return (
 			<div className="app">
 				<Route path="/search" render={() => (
-					<BookSearch onUpdateBookShelf={this.handleUpdateBookShelf} />)
-				} />
+					<BookSearch searchResult={searchResult}
+						onUpdateBookShelf={this.handleUpdateBookShelf}
+						onSearchBooks={this.handleSearchBooks}
+						onClearSearchResult={this.handleClearSearchResult} />
+				)} />
 				<Route exact path="/" render={() => (
 					<BookList books={books} onUpdateBookShelf={this.handleUpdateBookShelf} />
 				)} />

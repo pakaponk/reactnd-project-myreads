@@ -3,48 +3,22 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import Book from './Book';
-import * as BooksAPI from './BooksAPI';
 
 
 class BookSearch extends React.Component{
 
 	static propTypes = {
-		onUpdateBookShelf: PropTypes.func.isRequired
+		searchResult: PropTypes.array.isRequired,
+		onUpdateBookShelf: PropTypes.func.isRequired,
+		onSearchBooks: PropTypes.func.isRequired,
+		onClearSearchResult: PropTypes.func.isRequired
 	}
 
-	state = {
-		books : []
-	}
-
-	searchBooks(query){
-		if (query.length)
-		{
-			BooksAPI.search(query, 20)
-			.then(books => {
-				if (books.error && books.error === 'empty query')
-				{
-					this.setState({ books: []});
-				}
-				else
-				{
-					books = books.map(book =>
-						Object.assign({}, book, {
-							shelf: "none"
-						})
-					);
-					this.setState({ books });
-				}
-			});
-		}
-		else
-		{
-			this.setState({ books: []});
-		}
+	componentDidMount(){
+		this.props.onClearSearchResult();
 	}
 
 	render(){
-		const { books } = this.state;
-
 		return (
 			<div className="search-books">
 				<div className="search-books-bar">
@@ -59,12 +33,12 @@ class BookSearch extends React.Component{
 							you don't find a specific author or title. Every search is limited by search terms.
 						*/}
 						<input type="text" placeholder="Search by title or author"
-							onChange={(event) => this.searchBooks(event.target.value.trim())} />
+							onChange={(event) => this.props.onSearchBooks(event.target.value.trim())} />
 					</div>
 				</div>
 				<div className="search-books-results">
 					<ol className="books-grid">
-						{books.map(book => (
+						{this.props.searchResult.map(book => (
 							<li key={book.id}>
 								<Book book={book}
 									onUpdateBookShelf={this.props.onUpdateBookShelf} />
