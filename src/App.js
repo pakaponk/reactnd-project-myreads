@@ -24,14 +24,56 @@ class BooksApp extends React.Component {
 		}));
 	}
 
+	handleUpdateBookShelf = (selectedBook, shelf) => {
+		if (this.state.books.find(book => selectedBook.id === book.id))
+		{
+			if (shelf !== 'none')
+			{
+				this.updateBookInLocalLibrary(selectedBook, shelf);
+			}
+			else
+			{
+				this.removeBookFromLocalLibrary(selectedBook, shelf);
+			}
+		}
+		else
+		{
+			this.addNewBookToLocalLibrary(selectedBook, self);
+		}
+
+		BooksAPI.update(selectedBook, shelf);
+	}
+
+	addNewBookToLocalLibrary(newBook, shelf){
+		this.setState((state) => ({
+			books: [...state.books, Object.assign({}, newBook, { shelf }) ]
+		}));
+	}
+
+	updateBookInLocalLibrary(updatingBook, shelf){
+		this.setState((state) => ({
+			books: state.books.map(book =>
+				book.id === updatingBook.id ?
+					Object.assign({}, book, { shelf }) : book)
+		}));
+	}
+
+	removeBookFromLocalLibrary(removingBook, shelf){
+		this.setState((state) => ({
+			books: state.books.filter(book => removingBook.id !== book.id)
+		}));
+	}
+
 	render() {
 		const { books } = this.state;
 
 		return (
 			<div className="app">
-				<Route path="/search" component={BookSearch} />
+				<Route path="/search" render={() => (
+					<BookSearch onUpdateBookShelf={this.handleUpdateBookShelf} />)
+				} />
 				<Route exact path="/" render={() => (
-					<BookList books={books} />
+					<BookList books={books} onUpdateBookShelf={this.handleUpdateBookShelf} />
 				)} />
 			</div>
 		);

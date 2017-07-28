@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Book({ book }){
+function Book({ book, onUpdateBookShelf, shelf = "none" }){
 	const title = book.title;
 	const authors = (book.authors && book.authors.reduce((prev,author) => `${prev}, ${author}`));
 
@@ -20,7 +20,7 @@ function Book({ book }){
 			<div className="book-top">
 				<div className="book-cover" style={style}></div>
 				<div className="book-shelf-changer">
-					<select>
+					<select value={book.shelf} onChange={ (event) => onUpdateBookShelf(book, event.target.value) }>
 						<option value="none" disabled>Move to...</option>
 						<option value="currentlyReading">Currently Reading</option>
 						<option value="wantToRead">Want to Read</option>

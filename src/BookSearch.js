@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import Book from './Book';
@@ -6,6 +7,10 @@ import * as BooksAPI from './BooksAPI';
 
 
 class BookSearch extends React.Component{
+
+	static propTypes = {
+		onUpdateBookShelf: PropTypes.func.isRequired
+	}
 
 	state = {
 		books : []
@@ -22,6 +27,11 @@ class BookSearch extends React.Component{
 				}
 				else
 				{
+					books = books.map(book =>
+						Object.assign({}, book, {
+							shelf: "none"
+						})
+					);
 					this.setState({ books });
 				}
 			});
@@ -48,14 +58,16 @@ class BookSearch extends React.Component{
 							However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
 							you don't find a specific author or title. Every search is limited by search terms.
 						*/}
-						<input type="text" placeholder="Search by title or author" onChange={(event) => this.searchBooks(event.target.value.trim())} />
+						<input type="text" placeholder="Search by title or author"
+							onChange={(event) => this.searchBooks(event.target.value.trim())} />
 					</div>
 				</div>
 				<div className="search-books-results">
 					<ol className="books-grid">
 						{books.map(book => (
 							<li key={book.id}>
-								<Book book={book} />
+								<Book book={book}
+									onUpdateBookShelf={this.props.onUpdateBookShelf} />
 							</li>
 						))}
 					</ol>
