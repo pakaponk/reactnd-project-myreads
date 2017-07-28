@@ -1,4 +1,9 @@
 {
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pakaponk/reactnd-project-myreads.git"
+  },
+  "license": "BSD-3-Clause",
   "dependencies": {
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
