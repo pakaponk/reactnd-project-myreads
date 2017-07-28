@@ -38,7 +38,7 @@ class BooksApp extends React.Component {
 		}
 		else
 		{
-			this.addNewBookToLocalLibrary(selectedBook, self);
+			this.addNewBookToLocalLibrary(selectedBook, shelf);
 		}
 
 		BooksAPI.update(selectedBook, shelf);
