@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { debounce } from 'lodash/function';
 import { Link } from 'react-router-dom';
 
 import Book from './Book';
@@ -18,6 +19,8 @@ class BookSearch extends React.Component{
 		this.props.onClearSearchResult();
 	}
 
+	handleSearchBooks = debounce(this.props.onSearchBooks, 600);
+
 	render(){
 		return (
 			<div className="search-books">
@@ -33,7 +36,7 @@ class BookSearch extends React.Component{
 							you don't find a specific author or title. Every search is limited by search terms.
 						*/}
 						<input type="text" placeholder="Search by title or author"
-							onChange={(event) => this.props.onSearchBooks(event.target.value.trim())} />
+							onChange={(event) => this.handleSearchBooks(event.target.value.trim())} />
 					</div>
 				</div>
 				<div className="search-books-results">
