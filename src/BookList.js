@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import BookShelf from './BookShelf';
 
-function BookList({ books, onAddNewBook }){
+function BookList({ books }){
 	const currentlyReadingBooks = books.filter(book => book.shelf === 'currentlyReading');
 	const wantToReadBooks = books.filter(book => book.shelf === 'wantToRead');
 	const readBooks = books.filter(book => book.shelf === 'read');
@@ -20,7 +21,7 @@ function BookList({ books, onAddNewBook }){
 				</div>
 			</div>
 			<div className="open-search">
-				<a onClick={ onAddNewBook }>Add a book</a>
+				<Link to="/search" >Add a book</Link>
 			</div>
 		</div>
 	);

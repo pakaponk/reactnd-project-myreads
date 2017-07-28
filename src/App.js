@@ -1,9 +1,11 @@
 import React from 'react';
-import * as BooksAPI from './BooksAPI';
-import './App.css';
+import { Route } from 'react-router-dom';
 
 import BookList from './BookList';
 import BookSearch from './BookSearch';
+
+import * as BooksAPI from './BooksAPI';
+import './App.css';
 
 class BooksApp extends React.Component {
 	state = {
@@ -13,7 +15,6 @@ class BooksApp extends React.Component {
 		 * users can use the browser's back and forward buttons to navigate between
 		 * pages, as well as provide a good URL they can bookmark and share.
 		 */
-		showSearchPage: true,
 		books: []
 	}
 
@@ -23,26 +24,15 @@ class BooksApp extends React.Component {
 		}));
 	}
 
-	handleBookSearchOpen = () => {
-		this.setState({
-			showSearchPage: true
-		});
-	}
-
-	handleBookSearchClose = () => {
-		this.setState({
-			showSearchPage: false
-		});
-	}
-
 	render() {
 		const { books } = this.state;
 
 		return (
 			<div className="app">
-				{this.state.showSearchPage ? (
-					<BookSearch onClose={this.handleBookSearchClose} />
-				) : <BookList onAddNewBook={this.handleBookSearchOpen} books={books} />}
+				<Route path="/search" component={BookSearch} />
+				<Route exact path="/" render={() => (
+					<BookList books={books} />
+				)} />
 			</div>
 		);
 	}
