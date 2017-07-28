@@ -4,10 +4,15 @@ import PropTypes from 'prop-types';
 function Book({ book }){
 	const title = book.title;
 	const authors = book.authors.reduce((prev,author) => `${prev}, ${author}`);
+
+	const imageLinks = (book.imageLinks && book.imageLinks.thumbnail) ||
+		'https://books.google.co.th/googlebooks/images/no_cover_thumb.gif';
+
 	const style = {
 		width: 128,
 		height: 193,
-		backgroundImage: `url(${book.imageLinks.thumbnail})`
+		backgroundImage: `url(${imageLinks})`,
+		backgroundSize: 'cover'
 	};
 
 	return (
