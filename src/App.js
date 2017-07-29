@@ -77,21 +77,24 @@ class BooksApp extends React.Component {
 	}
 
 	addNewBookToLocalLibrary(newBook, shelf){
+		newBook = Object.assign({}, newBook, { shelf });
+
 		this.setState((state) => ({
-			books: [...state.books, Object.assign({}, newBook, { shelf }) ]
+			books: [...state.books, newBook],
+			searchResult: state.searchResult.length ?
+				state.searchResult.map(book => newBook.id === book.id ? newBook : book) : []
 		}));
 	}
 
 	updateBookInLocalLibrary(updatingBook, shelf){
+		updatingBook = Object.assign({}, updatingBook, { shelf: shelf })
+
 		this.setState((state) => ({
-			books: state.books.map(book => {
-				if (book.id === updatingBook.id )
-				{
-					console.log(Object.assign({}, book, { shelf: shelf }));
-					return Object.assign({}, book, { shelf: shelf });
-				}
-				return book;
-			})
+			books: state.books.map(book =>
+				book.id === updatingBook.id ? updatingBook : book
+			),
+			searchResult: state.searchResult.length ?
+				state.searchResult.map(book => updatingBook.id === book.id ? updatingBook : book) : []
 		}));
 	}
 
