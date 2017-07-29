@@ -60,13 +60,7 @@ class BooksApp extends React.Component {
 				}
 				else
 				{
-					books = books.map(book => {
-						const existedBook = this.state.books.find(b => b.id === book.id);
-						return existedBook ? existedBook : Object.assign({}, book, {
-							shelf: "none"
-						});
-					});
-					this.setState({ searchResult: books });
+					this.updateSearchResult(books);
 				}
 			});
 		}
@@ -102,6 +96,29 @@ class BooksApp extends React.Component {
 		this.setState((state) => ({
 			books: state.books.filter(book => removingBook.id !== book.id)
 		}));
+	}
+
+	/**
+	 * Update `searchResult` state if the result is not identical with the current one
+	 * @param Array books - the search result books
+	 */
+	updateSearchResult(books){
+		const booksMap = books.reduce(
+			(map, book) => map.set(book.id, book),
+			new Map()
+		);
+
+		if (!this.state.searchResult.length || this.state.searchResult.some(book => !booksMap.has(book.id)))
+		{
+			books = books.map(book => {
+				const existedBook = this.state.books.find(b => b.id === book.id);
+				return existedBook ? existedBook : Object.assign({}, book, {
+					shelf: "none"
+				});
+			});
+
+			this.setState({ searchResult: books });
+		}
 	}
 
 	render() {
