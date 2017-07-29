@@ -87,7 +87,7 @@ class BooksApp extends React.Component {
 	}
 
 	updateBookInLocalLibrary(updatingBook, shelf){
-		updatingBook = Object.assign({}, updatingBook, { shelf: shelf })
+		updatingBook = Object.assign({}, updatingBook, { shelf: shelf });
 
 		this.setState((state) => ({
 			books: state.books.map(book =>
